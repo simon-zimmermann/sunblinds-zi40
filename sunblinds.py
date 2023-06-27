@@ -7,7 +7,7 @@ import pyowm
 import math
 import json
 import holidays
-
+#TEST
 warnings.filterwarnings("ignore")
 GPIO.setwarnings(False)
 
