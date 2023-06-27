@@ -75,17 +75,32 @@ owm_token = f.read()
 #        print("Cur_pos: %f", cur_pos)
 #        last_move = False
 
-def go_up(sec):
-    GPIO.output(26, GPIO.LOW)
-    GPIO.output(21, GPIO.HIGH)
-    time.sleep(sec)
-    GPIO.output(21, GPIO.LOW)
+pos_up = False
+pos_down = False
 
-def go_down(sec):
-    GPIO.output(21, GPIO.LOW)
-    GPIO.output(26, GPIO.HIGH)
-    time.sleep(sec)
-    GPIO.output(26, GPIO.LOW)
+def go_up():
+    global pos_up
+    global pos_down
+    if(not pos_up):
+        print("Opening the blinds")
+        GPIO.output(26, GPIO.LOW)
+        GPIO.output(21, GPIO.HIGH)
+        time.sleep(time_blinds_up)
+        GPIO.output(21, GPIO.LOW)
+        pos_up = True
+        pos_down = False
+
+def go_down():
+    global pos_up
+    global pos_down
+    if(not pos_down):
+        print("Closing the blinds")
+        GPIO.output(21, GPIO.LOW)
+        GPIO.output(26, GPIO.HIGH)
+        time.sleep(time_blinds_down)
+        GPIO.output(26, GPIO.LOW)
+        pos_up = False
+        pos_down = True
 
 #def correct(last_move):
 #    global cur_pos
@@ -98,8 +113,6 @@ def go_down(sec):
 #        go_down(correct_up)
 #        cur_pos -= correct_up * v1
 
-pos_up = False
-pos_down = False
 
 owm = pyowm.OWM(owm_token)
 
@@ -142,15 +155,11 @@ while(True):
     print("is_blinds_want_down: %s" % is_blinds_want_down)
 
 
-    if (is_blinds_want_down and not is_blinds_need_up and not pos_down):
-        print("Closing the blinds")
-        go_down(time_blinds_down)
-        pos_down = True
+    if (is_blinds_want_down and not is_blinds_need_up):
+        go_down()
+    else:
+        go_up()
 
-    if (is_blinds_need_up and not pos_up):
-        print("Opening the blinds")
-        go_up(time_blinds_up)
-        pos_up = True
 #up
    # if (sun_azimuth >= 0 or sun_azimuth <= sun_azimuth_min) and not pos_up and date.isoweekday() in range(1,6):
    #     print("Going complete up!")
