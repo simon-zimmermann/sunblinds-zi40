@@ -165,11 +165,13 @@ while(True):
         else:
             go_up()
 
-        time.sleep(delay)
     except Exception as e:
         print("GOT AN ERROR!")
         print(e)
         go_up()
+
+    
+    time.sleep(delay)
 
 #up
    # if (sun_azimuth >= 0 or sun_azimuth <= sun_azimuth_min) and not pos_up and date.isoweekday() in range(1,6):
