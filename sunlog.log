@@ -1,0 +1,44 @@
+{
+  "weather_code": 804,
+  "sunrise_time": 1687835871,
+  "temperature": {
+    "temp": 293.6,
+    "temp_min": 290.94,
+    "temp_max": 294.81,
+    "temp_kf": null
+  },
+  "weather_icon_name": "04d",
+  "rain": {},
+  "reference_time": 1687855829,
+  "humidex": null,
+  "snow": {},
+  "wind": {
+    "speed": 2.89,
+    "deg": 303,
+    "gust": 4.3
+  },
+  "sunset_time": 1687894028,
+  "heat_index": null,
+  "detailed_status": "overcast clouds",
+  "humidity": 53,
+  "status": "Clouds",
+  "visibility_distance": 10000,
+  "dewpoint": null,
+  "pressure": {
+    "sea_level": 1020,
+    "press": 1020
+  },
+  "clouds": 100
+}
+Date and time: 27/06/2023 10:53:17
+Sun altitude: 51.136532
+Sun azimuth: -297.408214
+is_weekday: True
+is_sun_at_window: True
+is_sunup: True
+is_sunny: False
+is_hot: True
+is_windy: False
+is_blinds_need_up: False
+is_blinds_want_down: True
+Closing the blinds
