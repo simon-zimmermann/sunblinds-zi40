@@ -123,7 +123,6 @@ while(True):
     sun_azimuth = get_azimuth(lat, lon, date)
     #x = d - l * math.tan(math.radians(sun_altitude))
     #print("X-value: %f" % x)
-    print(json.dumps(wea, indent=2))
 
     is_weekday = date.isoweekday() in range(1,6)
     is_sun_at_window = (sun_azimuth_min < sun_azimuth <= sun_azimuth_max)
@@ -143,7 +142,11 @@ while(True):
             and \
             (is_sunup and is_sun_at_window)
 
-    print("Date and time: %s" % date.strftime("%d/%m/%Y %H:%M:%S"))
+    print("================================================================================")
+    print("= %s" % date.strftime("%d/%m/%Y %H:%M:%S"))
+    print("================================================================================")
+    print("Current weather report:")
+    print(json.dumps(wea, indent=2))
     print("Sun altitude: %f\nSun azimuth: %f" % (sun_altitude, sun_azimuth))
     print("is_weekday: %s" % is_weekday)
     print("is_sun_at_window: %s" % is_sun_at_window)
