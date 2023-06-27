@@ -7,7 +7,7 @@ import pyowm
 import math
 import json
 import holidays
-#TEST
+
 warnings.filterwarnings("ignore")
 GPIO.setwarnings(False)
 
@@ -21,7 +21,6 @@ city = 2959927
 #obs = owm.weather_at_coords(lat, lon)
 
 holidays = holidays.Germany()
-#l = 600
 l = 600
 d = 2350
 lat = 48.837938
@@ -40,6 +39,10 @@ phi_b = -230
 delay = 3600
 clouds = 70
 clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
+
+f = open("owm_token.txt")
+owm_token = f.read()
+
 
 def move_to(pos):
     t = 0
@@ -93,7 +96,7 @@ pos_up = True
 pos_down = False
 
 while(True):
-    owm = pyowm.OWM('f124577a1d03581431106c113a848bf6')
+    owm = pyowm.OWM(owm_token)
     obs = owm.weather_at_id(city)
     date = datetime.datetime.now()
     alt = get_altitude(lat, lon, date)
