@@ -1,3 +1,0 @@
-open crontab with crontab -e
-
-*/5 * * * * python3 /home/sunblinds-zi40/sunblinds.py > /home/sunblinds-zi40/sunlog.log

@@ -6,8 +6,20 @@ import warnings
 import pyowm
 import json
 import holidays
+import logging
 
-warnings.filterwarnings("ignore")
+logging.basicConfig(
+    format="%(asctime)s %(message)s", 
+    datefmt="%Y-%m-%d %H:%M:%S", 
+    level=logging.DEBUG,
+    handlers=[
+        logging.FileHandler("sunblinds.log"),
+        logging.StreamHandler()
+    ])
+
+logging.info("Starting sunblinds.py")
+
+#warnings.filterwarnings("ignore")
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(21, GPIO.OUT)
@@ -21,8 +33,8 @@ lon = 10.074317
 sun_azimuth_min = -335
 sun_azimuth_max = -230
 sun_altitude_threshold = 5
-time_blinds_down = 55
-time_blinds_up = 65
+time_blinds_down = 65
+time_blinds_up = 75
 delay = 3600
 clouds_threshold = 70
 temperature_threshold = 25
@@ -31,7 +43,7 @@ wind_gust_threshold = 15
 
 f = open("owm_token.txt")
 owm_token = f.read()
-owm = pyowm.OWM(owm_token)
+logging.info("Using Token: %s" % owm_token)
 
 pos_up = False
 pos_down = False
@@ -40,7 +52,7 @@ def go_up():
     global pos_up
     global pos_down
     if(not pos_up):
-        print("Opening the blinds")
+        logging.info("Opening the blinds")
         GPIO.output(26, GPIO.LOW)
         GPIO.output(21, GPIO.HIGH)
         time.sleep(time_blinds_up)
@@ -52,7 +64,7 @@ def go_down():
     global pos_up
     global pos_down
     if(not pos_down):
-        print("Closing the blinds")
+        logging.info("Closing the blinds")
         GPIO.output(21, GPIO.LOW)
         GPIO.output(26, GPIO.HIGH)
         time.sleep(time_blinds_down)
@@ -62,6 +74,7 @@ def go_down():
 
 while(True):
     try:
+        owm = pyowm.OWM(owm_token)
         wea = json.loads(owm.weather_at_id(city).get_weather().to_JSON())
         date = datetime.datetime.now()
         sun_altitude = get_altitude(lat, lon, date)
@@ -85,20 +98,21 @@ while(True):
                 (is_sunup)
                 #(is_sunup and is_sun_at_window)
 
-        print("================================================================================")
-        print("= %s" % date.strftime("%d/%m/%Y %H:%M:%S"))
-        print("================================================================================")
-        print("Current weather report:")
-        print(json.dumps(wea, indent=2))
-        print("Sun altitude: %f\nSun azimuth: %f" % (sun_altitude, sun_azimuth))
-        print("is_weekday: %s" % is_weekday)
-        #print("is_sun_at_window: %s" % is_sun_at_window)
-        print("is_sunup: %s" % is_sunup)
-        print("is_sunny: %s" % is_sunny)
-        print("is_hot: %s" % is_hot)
-        print("is_windy: %s" % is_windy)
-        print("is_blinds_need_up: %s" % is_blinds_need_up)
-        print("is_blinds_want_down: %s" % is_blinds_want_down)
+        logging.info("================================================================================")
+        logging.info("= %s" % date.strftime("%d/%m/%Y %H:%M:%S"))
+        logging.info("================================================================================")
+        logging.info("Current weather report:")
+        logging.info(json.dumps(wea, indent=2))
+        logging.info("Sun altitude: %f" % sun_altitude)
+        logging.info("Sun azimuth: %f" % sun_azimuth)
+        logging.info("is_weekday: %s" % is_weekday)
+        #logging.info("is_sun_at_window: %s" % is_sun_at_window)
+        logging.info("is_sunup: %s" % is_sunup)
+        logging.info("is_sunny: %s" % is_sunny)
+        logging.info("is_hot: %s" % is_hot)
+        logging.info("is_windy: %s" % is_windy)
+        logging.info("is_blinds_need_up: %s" % is_blinds_need_up)
+        logging.info("is_blinds_want_down: %s" % is_blinds_want_down)
 
 
         if (is_blinds_want_down and not is_blinds_need_up):
@@ -107,9 +121,8 @@ while(True):
             go_up()
 
     except Exception as e:
-        print("GOT AN ERROR!")
-        print(e)
+        logging.info("GOT AN ERROR!", exc_info=True)
         go_up()
 
-    
+    logging.info("Sleeping for %d seconds" % delay)
     time.sleep(delay)
