@@ -67,7 +67,7 @@ while(True):
         sun_altitude = get_altitude(lat, lon, date)
         sun_azimuth = get_azimuth(lat, lon, date)
         is_weekday = date.isoweekday() in range(1,6)
-        is_sun_at_window = (sun_azimuth_min < sun_azimuth <= sun_azimuth_max)
+        #is_sun_at_window = (sun_azimuth_min < sun_azimuth <= sun_azimuth_max)
         is_sunup = (sun_altitude > sun_altitude_threshold)
         is_sunny = wea["clouds"] < clouds_threshold
         is_hot = wea["temperature"]["temp"] > 273.15 + temperature_threshold
@@ -82,7 +82,8 @@ while(True):
         is_blinds_want_down = \
                 (is_sunny or is_hot) \
                 and \
-                (is_sunup and is_sun_at_window)
+                (is_sunup)
+                #(is_sunup and is_sun_at_window)
 
         print("================================================================================")
         print("= %s" % date.strftime("%d/%m/%Y %H:%M:%S"))
@@ -91,7 +92,7 @@ while(True):
         print(json.dumps(wea, indent=2))
         print("Sun altitude: %f\nSun azimuth: %f" % (sun_altitude, sun_azimuth))
         print("is_weekday: %s" % is_weekday)
-        print("is_sun_at_window: %s" % is_sun_at_window)
+        #print("is_sun_at_window: %s" % is_sun_at_window)
         print("is_sunup: %s" % is_sunup)
         print("is_sunny: %s" % is_sunny)
         print("is_hot: %s" % is_hot)
