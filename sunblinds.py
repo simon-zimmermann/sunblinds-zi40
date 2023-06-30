@@ -85,10 +85,13 @@ while(True):
         is_sunny = wea["clouds"] < clouds_threshold
         is_hot = wea["temperature"]["temp"] > 273.15 + temperature_threshold
         is_windy = wea["wind"]["speed"] > wind_threshold or wea["wind"]["gust"] > wind_gust_threshold
+        len_rain = len(wea["rain"])
+        is_rain = len_rain > 0
 
         # if the blinds need to be up
         is_blinds_need_up = \
                 is_windy or \
+                is_rain or \
                 (not is_sunup) or \
                 (not is_weekday)
         # if we want the blinds to be down
@@ -111,6 +114,8 @@ while(True):
         logging.info("is_sunny: %s" % is_sunny)
         logging.info("is_hot: %s" % is_hot)
         logging.info("is_windy: %s" % is_windy)
+        logging.info("len_rain: %s" % len_rain)
+        logging.info("is_rain: %s" % is_rain)
         logging.info("is_blinds_need_up: %s" % is_blinds_need_up)
         logging.info("is_blinds_want_down: %s" % is_blinds_want_down)
 
