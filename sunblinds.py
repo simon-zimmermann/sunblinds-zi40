@@ -37,7 +37,7 @@ time_blinds_down = 65
 time_blinds_up = 75
 delay = 600
 clouds_threshold = 70
-temperature_threshold = 25
+temperature_threshold = 10
 wind_threshold = 10
 wind_gust_threshold = 15
 
