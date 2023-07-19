@@ -88,7 +88,7 @@ while(True):
         is_windy = wea["wind"]["speed"] > wind_threshold or wea["wind"]["gust"] > wind_gust_threshold
         len_rain = len(wea["rain"])
         is_rain = False
-        if len_rain > 0:
+        if len_rain > 0 and "1h" in wea["rain"]:
             if wea["rain"]["1h"] > rain_threshold:
                 is_rain = True
 
