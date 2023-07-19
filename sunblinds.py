@@ -40,6 +40,7 @@ clouds_threshold = 70
 temperature_threshold = 10
 wind_threshold = 10
 wind_gust_threshold = 15
+rain_threshold = 0.5
 
 f = open("owm_token.txt")
 owm_token = f.read()
@@ -86,7 +87,10 @@ while(True):
         is_hot = wea["temperature"]["temp"] > 273.15 + temperature_threshold
         is_windy = wea["wind"]["speed"] > wind_threshold or wea["wind"]["gust"] > wind_gust_threshold
         len_rain = len(wea["rain"])
-        is_rain = len_rain > 0
+        is_rain = False
+        if len_rain > 0:
+            if wea["rain"]["1h"] > rain_threshold:
+                is_rain = True
 
         # if the blinds need to be up
         is_blinds_need_up = \
