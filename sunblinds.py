@@ -40,7 +40,10 @@ clouds_threshold = 70
 temperature_threshold = 10
 wind_threshold = 10
 wind_gust_threshold = 15
-rain_threshold = 0.5
+rain_threshold = 2
+work_start_h = 8
+work_end_h = 17
+work_end_d = 4
 
 f = open("owm_token.txt")
 owm_token = f.read()
@@ -80,7 +83,6 @@ while(True):
         date = datetime.datetime.now()
         sun_altitude = get_altitude(lat, lon, date)
         sun_azimuth = get_azimuth(lat, lon, date)
-        is_weekday = date.isoweekday() in range(1,6)
         #is_sun_at_window = (sun_azimuth_min < sun_azimuth <= sun_azimuth_max)
         is_sunup = (sun_altitude > sun_altitude_threshold)
         is_sunny = wea["clouds"] < clouds_threshold
@@ -91,13 +93,17 @@ while(True):
         if len_rain > 0 and "1h" in wea["rain"]:
             if wea["rain"]["1h"] > rain_threshold:
                 is_rain = True
+        is_workday = date.weekday() < work_end_d
+        is_worktime = date.hour >= work_start_h and date.hour < work_end_h
+        is_working = is_workday and is_worktime
 
         # if the blinds need to be up
         is_blinds_need_up = \
                 is_windy or \
                 is_rain or \
                 (not is_sunup) or \
-                (not is_weekday)
+                (is_working)
+        
         # if we want the blinds to be down
         is_blinds_want_down = \
                 (is_sunny or is_hot) \
@@ -112,7 +118,7 @@ while(True):
         logging.info(json.dumps(wea, indent=2))
         logging.info("Sun altitude: %f" % sun_altitude)
         logging.info("Sun azimuth: %f" % sun_azimuth)
-        logging.info("is_weekday: %s" % is_weekday)
+        logging.info("is_working: %s" % is_working)
         #logging.info("is_sun_at_window: %s" % is_sun_at_window)
         logging.info("is_sunup: %s" % is_sunup)
         logging.info("is_sunny: %s" % is_sunny)
