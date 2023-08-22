@@ -41,7 +41,7 @@ temperature_threshold = 10
 wind_threshold = 10
 wind_gust_threshold = 15
 rain_threshold = 2
-work_start_h = 8
+work_start_h = 9
 work_end_h = 17
 work_end_d = 4
 
